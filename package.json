@@ -1,0 +1,59 @@
+{
+	"name": "images-palettes",
+	"version": "1.0.0",
+	"private": true,
+	"description": "Filter YouTube thumbnails by color palette: extract palettes with k-means, node-vibrant and colorthief, then rank them against a reference.",
+	"keywords": [
+		"palette",
+		"color",
+		"youtube",
+		"thumbnails",
+		"k-means",
+		"oklab",
+		"sharp",
+		"cli"
+	],
+	"author": "ReinTristan",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ReinTristan/images-palettes.git"
+	},
+	"bugs": {
+		"url": "https://github.com/ReinTristan/images-palettes/issues"
+	},
+	"homepage": "https://github.com/ReinTristan/images-palettes#readme",
+	"type": "module",
+	"engines": {
+		"node": ">=22.12.0"
+	},
+	"scripts": {
+		"analyze": "tsx src/cli.ts analyze",
+		"match": "tsx src/cli.ts match",
+		"test": "vitest run",
+		"typecheck": "tsc"
+	},
+	"devEngines": {
+		"packageManager": {
+			"name": "pnpm",
+			"version": "12.10.1",
+			"onFail": "download"
+		}
+	},
+	"packageManager": "pnpm@12.10.1",
+	"dependencies": {
+		"colorthief": "^3.5.0",
+		"commander": "^15.0.0",
+		"culori": "^4.0.2",
+		"node-vibrant": "^4.0.4",
+		"p-limit": "^7.3.3",
+		"sharp": "^0.35.5"
+	},
+	"devDependencies": {
+		"@types/culori": "^4.0.1",
+		"@types/node": "^24.19.2",
+		"tsx": "^4.23.15",
+		"typescript": "^7.0.2",
+		"vitest": "^5.0.3"
+	}
+}
