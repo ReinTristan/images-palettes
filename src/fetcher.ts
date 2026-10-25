@@ -54,7 +54,9 @@ export async function downloadThumbnail(url: string): Promise<Buffer> {
 	return data;
 }
 
+export const isUrl = (source: string) => /^https?:\/\//.test(source);
+
 /** Reads a local path or downloads a URL (used for --palette-image). */
 export async function loadImage(source: string): Promise<Buffer> {
-	return /^https?:\/\//.test(source) ? downloadThumbnail(source) : readFile(source);
+	return isUrl(source) ? downloadThumbnail(source) : readFile(source);
 }

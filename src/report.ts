@@ -16,7 +16,7 @@ const OUT_DIR = "out";
 
 // ── Terminal ────────────────────────────────────────────────────────────────
 
-function swatch(hex: string, width = 2): string {
+export function swatch(hex: string, width = 2): string {
 	const [r, g, b] = hexToRgb(hex);
 	return `\x1b[48;2;${r};${g};${b}m${" ".repeat(width)}\x1b[0m`;
 }

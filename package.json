@@ -1,6 +1,6 @@
 {
 	"name": "images-palettes",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"private": true,
 	"description": "Filter YouTube thumbnails by color palette: extract palettes with k-means, node-vibrant and colorthief, then rank them against a reference.",
 	"keywords": [
@@ -24,29 +24,23 @@
 	},
 	"homepage": "https://github.com/ReinTristan/images-palettes#readme",
 	"type": "module",
-	"engines": {
-		"node": ">=22.12.0"
-	},
 	"scripts": {
-		"analyze": "tsx src/cli.ts analyze",
-		"match": "tsx src/cli.ts match",
+		"start": "tsx src/index.ts",
+		"analyze": "tsx src/index.ts analyze",
+		"match": "tsx src/index.ts match",
 		"test": "vitest run",
 		"typecheck": "tsc"
 	},
-	"devEngines": {
-		"packageManager": {
-			"name": "pnpm",
-			"version": "12.10.1",
-			"onFail": "download"
-		}
-	},
-	"packageManager": "pnpm@12.10.1",
 	"dependencies": {
+		"@clack/prompts": "^1.8.1",
 		"colorthief": "^3.5.0",
 		"commander": "^15.0.0",
+		"conf": "^16.0.0",
 		"culori": "^4.0.2",
 		"node-vibrant": "^4.0.4",
+		"open": "^11.0.4",
 		"p-limit": "^7.3.3",
+		"picocolors": "^1.1.1",
 		"sharp": "^0.35.5"
 	},
 	"devDependencies": {
@@ -55,5 +49,9 @@
 		"tsx": "^4.23.15",
 		"typescript": "^7.0.2",
 		"vitest": "^5.0.3"
-	}
+	},
+	"engines": {
+		"node": ">=24.22.1"
+	},
+	"packageManager": "pnpm@12.10.1"
 }

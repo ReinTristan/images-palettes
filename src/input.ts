@@ -1,4 +1,5 @@
 import { readFile } from "node:fs/promises";
+import { log } from "@clack/prompts";
 
 export interface Thumbnail {
 	url: string;
@@ -63,7 +64,7 @@ export async function readThumbnails(path: string, fields: FieldOptions = {}): P
 	const thumbnails = items.map((item) => toThumbnail(item, fields));
 	const skipped = thumbnails.filter((t) => !t).length;
 	if (skipped) {
-		console.warn(`⚠ ${skipped} items without a thumbnail URL (try --url-field <path>)`);
+		log.warn(`${skipped} items without a thumbnail URL (try --url-field <path>)`);
 	}
 
 	// Dedupe by URL, keeping the first occurrence.

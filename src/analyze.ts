@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
+import { log, progress } from "@clack/prompts";
 import pLimit from "p-limit";
 import type { PaletteColor } from "./color.ts";
 import type { PaletteExtractor } from "./extractors/index.ts";
@@ -37,10 +38,14 @@ export async function analyze(
 	const pending = thumbnails.filter((t) => extractors.some((e) => !caches.get(e)![t.url]));
 
 	if (pending.length) {
-		console.log(`Analyzing ${pending.length}/${thumbnails.length} thumbnails (${extractors.map((e) => e.name).join(", ")})…`);
+		const bar = progress({ max: pending.length, style: "block", size: 24 });
+		const label = (done: number, failed: number) =>
+			`${done}/${pending.length} thumbnails${failed ? ` (${failed} failed)` : ""} · ${extractors.map((e) => e.name).join(", ")}`;
+		bar.start(label(0, 0));
 		const limit = pLimit(concurrency);
 		let done = 0;
-		let failed = 0;
+		// Collected and printed after the bar, so warnings don't break its redraws.
+		const failures: string[] = [];
 
 		await Promise.all(
 			pending.map((thumb) =>
@@ -52,18 +57,18 @@ export async function analyze(
 							cache[thumb.url] ??= await extractor.extract(image);
 						}
 					} catch (error) {
-						failed++;
-						console.warn(`\n⚠ ${thumb.url}: ${(error as Error).message}`);
+						failures.push(`${thumb.url}: ${(error as Error).message}`);
 					}
 					done++;
-					process.stdout.write(`\r  ${done}/${pending.length}${failed ? ` (${failed} failed)` : ""}`);
+					bar.advance(1, label(done, failures.length));
 					// Save now and then so a crash halfway doesn't lose everything.
 					if (done % 100 === 0) await Promise.all(extractors.map((e) => saveCache(e, caches.get(e)!)));
 				}),
 			),
 		);
-		process.stdout.write("\n");
 		await Promise.all(extractors.map((e) => saveCache(e, caches.get(e)!)));
+		bar.stop(`Analyzed ${pending.length - failures.length}/${pending.length} new thumbnails (${thumbnails.length} total)`);
+		for (const failure of failures) log.warn(failure);
 	}
 
 	return caches;
